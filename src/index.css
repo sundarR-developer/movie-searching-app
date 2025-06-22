@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+<<<<<<< HEAD
 
 :root {
   --primary-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -209,3 +210,5 @@ body::after {
     transform: translateX(100%);
   }
 }
+=======
+>>>>>>> 6a343bd2765c2db80c287955ea89e6df5a5a878c
