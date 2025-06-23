@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import MovieCard from './MovieCard';
+import { useFavorites } from '../context/FavoritesContext';
 
-const Favorites = ({ favorites, onToggleFavorite }) => {
+const Favorites = () => {
   const navigate = useNavigate();
+  const { favorites, toggleFavorite } = useFavorites();
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
@@ -38,7 +40,7 @@ const Favorites = ({ favorites, onToggleFavorite }) => {
             <MovieCard
               key={movie.imdbID}
               movie={movie}
-              onToggleFavorite={onToggleFavorite}
+              onToggleFavorite={toggleFavorite}
               isFavorite={true}
             />
           ))}

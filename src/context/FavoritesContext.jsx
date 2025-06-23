@@ -1,35 +1,37 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const FavoritesContext = createContext();
+export const FavoritesContext = createContext();
 
 export const useFavorites = () => useContext(FavoritesContext);
 
 export const FavoritesProvider = ({ children }) => {
-  const [favorites, setFavorites] = useState(() => {
-    const stored = localStorage.getItem('favorites');
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
-  const addFavorite = (movie) => {
-    if (!favorites.some((fav) => fav.imdbID === movie.imdbID)) {
-      setFavorites([...favorites, movie]);
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
     }
-  };
+  }, []);
 
-  const removeFavorite = (id) => {
-    setFavorites(favorites.filter((movie) => movie.imdbID !== id));
-  };
+  const toggleFavorite = (movie) => {
+    setFavorites((prevFavorites) => {
+      const isFavorited = prevFavorites.some((fav) => fav.imdbID === movie.imdbID);
+      let updatedFavorites;
 
-  const isFavorite = (id) => favorites.some((movie) => movie.imdbID === id);
+      if (isFavorited) {
+        updatedFavorites = prevFavorites.filter((fav) => fav.imdbID !== movie.imdbID);
+      } else {
+        updatedFavorites = [...prevFavorites, movie];
+      }
+
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   return (
-    <FavoritesContext.Provider
-      value={{ favorites, addFavorite, removeFavorite, isFavorite }}
-    >
+    <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
       {children}
     </FavoritesContext.Provider>
   );
